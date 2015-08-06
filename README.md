@@ -8,18 +8,17 @@ When using `AFHTTPRequestOperationManager`, you enjoy `NSOperation` capabilities
 
 ### Usage
 
-```NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-queue.maxConcurrentOperationCount = 4;
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    queue.maxConcurrentOperationCount = 4;
 
-AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-manager.responseSerializer = [AFHTTPResponseSerializer serializer];
+    AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
 
-[queue addOperation:[AFHTTPSessionOperation operationWithManager:manager method:@"GET" URLString:@"http://www.apple.com" parameters:nil success:^(NSURLSessionDataTask * task, id responseObject) {
-NSLog(@"%@", responseObject);
-} failure:^(NSURLSessionDataTask * task, NSError * error) {
-NSLog(@"%@", error);
-}]];
-```
+    [queue addOperation:[AFHTTPSessionOperation operationWithManager:manager method:@"GET" URLString:@"http://www.example.com/path" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
+        // use `responseObject` here
+    } failure:^(NSURLSessionDataTask * task, NSError * error) {
+        // handle `error` here
+    }]];
 
 ### Reference
 
