@@ -12,7 +12,6 @@ When using `AFHTTPRequestOperationManager`, you enjoy `NSOperation` capabilities
     queue.maxConcurrentOperationCount = 4;
 
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
-    manager.responseSerializer = [AFHTTPResponseSerializer serializer];
 
     [queue addOperation:[AFHTTPSessionOperation operationWithManager:manager method:@"GET" URLString:@"http://www.example.com/path" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
         // use `responseObject` here
