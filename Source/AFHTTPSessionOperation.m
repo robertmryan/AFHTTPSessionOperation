@@ -25,8 +25,8 @@
 @property (nonatomic, copy) NSString *method;
 @property (nonatomic, copy) NSString *URLString;
 @property (nonatomic, copy) id parameters;
-@property (nonatomic, copy) void (^success)(NSURLSessionDataTask * task, id responseObject);
-@property (nonatomic, copy) void (^failure)(NSURLSessionDataTask * task, NSError * error);
+@property (nonatomic, copy) void (^success)(NSURLSessionDataTask *task, id responseObject);
+@property (nonatomic, copy) void (^failure)(NSURLSessionDataTask *task, NSError * error);
 
 @property (nonatomic, weak) NSURLSessionTask *task;
 
@@ -54,23 +54,26 @@
 }
 
 - (void)main {
-    NSURLSessionTask *task = [self.manager dataTaskWithHTTPMethod:self.method URLString:self.URLString parameters:self.parameters success:^(NSURLSessionDataTask * task, id responseObject) {
+    NSURLSessionTask *task = [self.manager dataTaskWithHTTPMethod:self.method URLString:self.URLString parameters:self.parameters success:^(NSURLSessionDataTask *task, id responseObject) {
         if (self.success) {
             self.success(task, responseObject);
-            self.success = nil;
-            self.failure = nil;
         }
         [self completeOperation];
-    } failure:^(NSURLSessionDataTask * task, NSError * error) {
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
         if (self.failure) {
             self.failure(task, error);
-            self.failure = nil;
-            self.success = nil;
         }
         [self completeOperation];
     }];
     [task resume];
     self.task = task;
+}
+
+- (void)completeOperation {
+    self.failure = nil;
+    self.success = nil;
+    
+    [super completeOperation];
 }
 
 - (void)cancel {
