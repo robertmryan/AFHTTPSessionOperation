@@ -51,19 +51,35 @@
     return YES;
 }
 
+- (BOOL)isExecuting {
+    @synchronized(self) {
+        return _executing;
+    }
+}
+
+- (BOOL)isFinished {
+    @synchronized(self) {
+        return _finished;
+    }
+}
+
 - (void)setExecuting:(BOOL)executing {
-    if (_executing != executing) {
-        [self willChangeValueForKey:@"isExecuting"];
-        _executing = executing;
-        [self didChangeValueForKey:@"isExecuting"];
+    @synchronized(self) {
+        if (_executing != executing) {
+            [self willChangeValueForKey:@"isExecuting"];
+            _executing = executing;
+            [self didChangeValueForKey:@"isExecuting"];
+        }
     }
 }
 
 - (void)setFinished:(BOOL)finished {
-    if (_finished != finished) {
-        [self willChangeValueForKey:@"isFinished"];
-        _finished = finished;
-        [self didChangeValueForKey:@"isFinished"];
+    @synchronized(self) {
+        if (_finished != finished) {
+            [self willChangeValueForKey:@"isFinished"];
+            _finished = finished;
+            [self didChangeValueForKey:@"isFinished"];
+        }
     }
 }
 
