@@ -65,20 +65,24 @@
 
 - (void)setExecuting:(BOOL)executing {
     @synchronized(self) {
+        NSString *key = NSStringFromSelector(@selector(isExecuting));
+        
         if (_executing != executing) {
-            [self willChangeValueForKey:@"isExecuting"];
+            [self willChangeValueForKey:key];
             _executing = executing;
-            [self didChangeValueForKey:@"isExecuting"];
+            [self didChangeValueForKey:key];
         }
     }
 }
 
 - (void)setFinished:(BOOL)finished {
     @synchronized(self) {
+        NSString *key = NSStringFromSelector(@selector(isFinished));
+    
         if (_finished != finished) {
-            [self willChangeValueForKey:@"isFinished"];
+            [self willChangeValueForKey:key];
             _finished = finished;
-            [self didChangeValueForKey:@"isFinished"];
+            [self didChangeValueForKey:key];
         }
     }
 }
