@@ -45,6 +45,11 @@
     return operation;
 }
 
+- (void)dealloc
+{
+    [_progress removeObserver:self forKeyPath:NSStringFromSelector(@selector(fractionCompleted))];
+}
+
 - (void)main
 {
     NSProgress *progress = nil;
