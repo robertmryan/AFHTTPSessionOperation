@@ -4,6 +4,8 @@
 
 This is a `NSOperation` subclass for requests added to `AFHTTPSessionManager`. 
 
+This is for AFNetworking 2.x. See [master branch](https://github.com/robertmryan/AFHTTPSessionOperation/) of this repo if you're using AFNetworking 3.0.
+
 When using `AFHTTPRequestOperationManager`, you enjoy `NSOperation` capabilities, but when using `AFHTTPSessionManager`, you don't. This is somewhat understandable (as `NSURLSession` introduces background requests, and that's incompatible with `NSOperation`-based approaches), but when performing requests in the foreground, it's useful to have `NSOperation`-style capabilities. This class makes that possible.
 
 ### Usage
