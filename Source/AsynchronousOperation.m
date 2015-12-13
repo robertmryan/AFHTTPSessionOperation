@@ -1,17 +1,17 @@
 //
-//  ConcurrentOperation.m
+//  AsynchronousOperation.m
 //
 
-#import "ConcurrentOperation.h"
+#import "AsynchronousOperation.h"
 
-@interface ConcurrentOperation ()
+@interface AsynchronousOperation ()
 
 @property (nonatomic, getter = isFinished, readwrite)  BOOL finished;
 @property (nonatomic, getter = isExecuting, readwrite) BOOL executing;
 
 @end
 
-@implementation ConcurrentOperation
+@implementation AsynchronousOperation
 
 @synthesize finished  = _finished;
 @synthesize executing = _executing;
@@ -36,16 +36,17 @@
     [self main];
 }
 
+- (void)main {
+    NSAssert(![self isMemberOfClass:[AsynchronousOperation class]], @"AsynchronousOperation is abstract class that must be subclassed");
+    NSAssert(false, @"AsynchronousOperation subclasses must override `main`.");
+}
+             
 - (void)completeOperation {
     self.executing = NO;
     self.finished  = YES;
 }
 
 #pragma mark - NSOperation methods
-
-- (BOOL)isConcurrent {
-    return YES;
-}
 
 - (BOOL)isAsynchronous {
     return YES;

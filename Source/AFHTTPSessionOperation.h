@@ -5,13 +5,13 @@
 //  Copyright (c) 2015 Robert Ryan. All rights reserved.
 //
 
-#import "ConcurrentOperation.h"
+#import "AsynchronousOperation.h"
 
 @class AFHTTPSessionManager;
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AFHTTPSessionOperation : ConcurrentOperation
+@interface AFHTTPSessionOperation : AsynchronousOperation
 
 + (nullable instancetype)operationWithManager:(AFHTTPSessionManager *)manager
                                        method:(NSString *)method
