@@ -52,7 +52,7 @@ When using `AFHTTPRequestOperationManager` (now retired), you enjoy `NSOperation
             NSURL *documentsURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:false error:&error];
             return [documentsURL URLByAppendingPathComponent:filename];
         } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
-            NSLog(@"%@ done %@", filename, (error.localizedDescription ? error.localizedDescription : @""));
+            NSLog(@"%@ done %@", filename, (error.localizedDescription ?: @""));
         }];
         [queue addOperation:operation];
     }
