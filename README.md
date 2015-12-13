@@ -4,20 +4,31 @@
 
 This is a `NSOperation` subclass for requests added to `AFHTTPSessionManager`. 
 
-When using `AFHTTPRequestOperationManager`, you enjoy `NSOperation` capabilities, but when using `AFHTTPSessionManager`, you don't. This is somewhat understandable (as `NSURLSession` introduces background requests, and that's incompatible with `NSOperation`-based approaches), but when performing requests in the foreground, it's useful to have `NSOperation`-style capabilities. This class makes that possible.
+This has been updated for AFNetworking 3.0. See [`2.x` branch](https://github.com/robertmryan/AFHTTPSessionOperation/tree/2.x) of this repo if you're using AFNetworking 2.x.
+
+When using `AFHTTPRequestOperationManager` (now retired), you enjoy `NSOperation` capabilities, but when using `AFHTTPSessionManager`, you don't. This is somewhat understandable (as `NSURLSession` introduces background requests, and that's incompatible with `NSOperation`-based approaches), but when performing requests in the foreground, it's useful to have `NSOperation`-style capabilities. This class makes that possible.
 
 ### Usage
 
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    queue.maxConcurrentOperationCount = 4;
-
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
+    manager.responseSerializer = [AFImageResponseSerializer serializer];
 
-    [queue addOperation:[AFHTTPSessionOperation operationWithManager:manager method:@"GET" URLString:@"http://www.example.com/path" parameters:nil success:^(NSURLSessionDataTask *task, id responseObject) {
-        // use `responseObject` here
-    } failure:^(NSURLSessionDataTask * task, NSError * error) {
-        // handle `error` here
-    }]];
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    queue.maxConcurrentOperationCount = 3;
+
+    NSArray *filenames = @[@"file1.jpg", @"file2.jpg", @"file3.jpg", @"file4.jpg", @"file5.jpg", @"file6.jpg"];
+
+    for (NSString *filename in filenames)  {
+        NSString *urlString = [@"http://example.com" stringByAppendingPathComponent:filename];
+        NSOperation *operation = [AFHTTPSessionOperation operationWithManager:manager HTTPMethod:@"GET" URLString:urlString parameters:nil uploadProgress:nil downloadProgress:^(NSProgress *downloadProgress) {
+            NSLog(@"%@: %.1f", filename, downloadProgress.fractionCompleted * 100.0);
+        } success:^(NSURLSessionDataTask *task, id responseObject) {
+            NSLog(@"%@: %@", filename, NSStringFromCGSize([responseObject size]));
+        } failure:^(NSURLSessionDataTask *task, NSError *error) {
+            NSLog(@"%@: %@", filename, error.localizedDescription);
+        }];
+        [queue addOperation:operation];
+    }
 
 ### Reference
 
