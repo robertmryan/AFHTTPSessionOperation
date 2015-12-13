@@ -2,13 +2,15 @@
 
 ### Introduction
 
-This is a `NSOperation` subclass for requests added to `AFHTTPSessionManager`. 
+`AFHTTPSessionOperation` is a `NSOperation` subclass for HTTP requests added to `AFHTTPSessionManager`. `AFURLSessionOperation` is a `NSOperation` subclass for data, upload, and download requests implemented in `AFURLSessionManager`. 
 
 This has been updated for AFNetworking 3.0. See [`2.x` branch](https://github.com/robertmryan/AFHTTPSessionOperation/tree/2.x) of this repo if you're using AFNetworking 2.x.
 
 When using `AFHTTPRequestOperationManager` (now retired), you enjoy `NSOperation` capabilities, but when using `AFHTTPSessionManager`, you don't. This is somewhat understandable (as `NSURLSession` introduces background requests, and that's incompatible with `NSOperation`-based approaches), but when performing requests in the foreground, it's useful to have `NSOperation`-style capabilities. This class makes that possible.
 
 ### Usage
+
+#### AFHTTPSessionOperation
 
     AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     manager.responseSerializer = [AFImageResponseSerializer serializer];
@@ -26,6 +28,31 @@ When using `AFHTTPRequestOperationManager` (now retired), you enjoy `NSOperation
             NSLog(@"%@: %@", filename, NSStringFromCGSize([responseObject size]));
         } failure:^(NSURLSessionDataTask *task, NSError *error) {
             NSLog(@"%@: %@", filename, error.localizedDescription);
+        }];
+        [queue addOperation:operation];
+    }
+
+#### AFURLSessionOperation
+
+    AFURLSessionManager *manager = [[AFURLSessionManager alloc] init];
+
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    queue.maxConcurrentOperationCount = 3;
+
+    NSArray *filenames = @[@"file1.jpg", @"file2.jpg", @"file3.jpg", @"file4.jpg", @"file5.jpg", @"file6.jpg"];
+
+    for (NSString *filename in filenames)  {
+        NSString *urlString = [@"http://example.com" stringByAppendingPathComponent:filename];
+        NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:urlString]];
+
+        NSOperation *operation = [AFURLSessionOperation downloadOperationWithManager:manager request:request progress:^(NSProgress * _Nonnull downloadProgress) {
+            NSLog(@"%@: %.1f", filename, downloadProgress.fractionCompleted * 100.0);
+        } destination:^NSURL * _Nonnull(NSURL * _Nonnull targetPath, NSURLResponse * _Nonnull response) {
+            NSError *error;
+            NSURL *documentsURL = [[NSFileManager defaultManager] URLForDirectory:NSDocumentDirectory inDomain:NSUserDomainMask appropriateForURL:nil create:false error:&error];
+            return [documentsURL URLByAppendingPathComponent:filename];
+        } completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
+            NSLog(@"%@ done %@", filename, (error.localizedDescription ? error.localizedDescription : @""));
         }];
         [queue addOperation:operation];
     }

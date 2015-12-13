@@ -16,10 +16,6 @@
 
 @implementation AFURLSessionOperation
 
-- (void)dealloc {
-    NSLog(@"%s", __FUNCTION__);
-}
-
 + (instancetype)dataOperationWithManager:(AFURLSessionManager *)manager
                                  request:(NSURLRequest *)request
                        completionHandler:(nullable void (^)(NSURLResponse *response, id _Nullable responseObject,  NSError * _Nullable error))completionHandler {
