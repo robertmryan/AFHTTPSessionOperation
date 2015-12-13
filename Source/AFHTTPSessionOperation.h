@@ -14,11 +14,13 @@ NS_ASSUME_NONNULL_BEGIN
 @interface AFHTTPSessionOperation : AsynchronousOperation
 
 + (nullable instancetype)operationWithManager:(AFHTTPSessionManager *)manager
-                                       method:(NSString *)method
+                                   HTTPMethod:(NSString *)method
                                     URLString:(NSString *)URLString
                                    parameters:(nullable id)parameters
-                                      success:(nullable void (^)(NSURLSessionDataTask *task, id responseObject))success
-                                      failure:(nullable void (^)(NSURLSessionDataTask *task, NSError * error))failure;
+                               uploadProgress:(nullable void (^)(NSProgress *uploadProgress)) uploadProgress
+                             downloadProgress:(nullable void (^)(NSProgress *downloadProgress)) downloadProgress
+                                      success:(void (^)(NSURLSessionDataTask *, id))success
+                                      failure:(void (^)(NSURLSessionDataTask *, NSError *))failure;
 
 @end
 

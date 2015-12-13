@@ -15,6 +15,8 @@
 - (NSURLSessionDataTask *)dataTaskWithHTTPMethod:(NSString *)method
                                        URLString:(NSString *)URLString
                                       parameters:(id)parameters
+                                  uploadProgress:(nullable void (^)(NSProgress *uploadProgress)) uploadProgress
+                                downloadProgress:(nullable void (^)(NSProgress *downloadProgress)) downloadProgress
                                          success:(void (^)(NSURLSessionDataTask *, id))success
                                          failure:(void (^)(NSURLSessionDataTask *, NSError *))failure;
 @end
@@ -25,6 +27,8 @@
 @property (nonatomic, copy) NSString *method;
 @property (nonatomic, copy) NSString *URLString;
 @property (nonatomic, copy) id parameters;
+@property (nonatomic, copy) void (^uploadProgress)(NSProgress *uploadProgress);
+@property (nonatomic, copy) void (^downloadProgress)(NSProgress *downloadProgress);
 @property (nonatomic, copy) void (^success)(NSURLSessionDataTask *task, id responseObject);
 @property (nonatomic, copy) void (^failure)(NSURLSessionDataTask *task, NSError * error);
 
@@ -34,12 +38,14 @@
 
 @implementation AFHTTPSessionOperation
 
-+ (nullable instancetype)operationWithManager:(AFHTTPSessionManager *)manager
-                                       method:(NSString *)method
-                                    URLString:(NSString *)URLString
-                                   parameters:(nullable id)parameters
-                                      success:(nullable void (^)(NSURLSessionDataTask *task, id responseObject))success
-                                      failure:(nullable void (^)(NSURLSessionDataTask *task, NSError *error))failure {
++ (instancetype)operationWithManager:(AFHTTPSessionManager *)manager
+                          HTTPMethod:(NSString *)method
+                           URLString:(NSString *)URLString
+                          parameters:(id)parameters
+                      uploadProgress:(void (^)(NSProgress *uploadProgress)) uploadProgress
+                    downloadProgress:(void (^)(NSProgress *downloadProgress)) downloadProgress
+                             success:(void (^)(NSURLSessionDataTask *, id))success
+                             failure:(void (^)(NSURLSessionDataTask *, NSError *))failure {
 
     AFHTTPSessionOperation *operation = [[self alloc] init];
     
@@ -47,6 +53,8 @@
     operation.method = method;
     operation.URLString = URLString;
     operation.parameters = parameters;
+    operation.uploadProgress = uploadProgress;
+    operation.downloadProgress = downloadProgress;
     operation.success = success;
     operation.failure = failure;
     
@@ -54,7 +62,7 @@
 }
 
 - (void)main {
-    NSURLSessionTask *task = [self.manager dataTaskWithHTTPMethod:self.method URLString:self.URLString parameters:self.parameters success:^(NSURLSessionDataTask *task, id responseObject) {
+    NSURLSessionTask *task = [self.manager dataTaskWithHTTPMethod:self.method URLString:self.URLString parameters:self.parameters uploadProgress:self.uploadProgress downloadProgress:self.downloadProgress success:^(NSURLSessionDataTask *task, id responseObject){
         if (self.success) {
             self.success(task, responseObject);
         }
@@ -72,6 +80,8 @@
 - (void)completeOperation {
     self.failure = nil;
     self.success = nil;
+    self.downloadProgress = nil;
+    self.uploadProgress = nil;
     
     [super completeOperation];
 }
