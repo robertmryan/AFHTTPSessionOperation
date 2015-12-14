@@ -57,6 +57,84 @@ When using `AFHTTPRequestOperationManager` (now retired), you enjoy `NSOperation
         [queue addOperation:operation];
     }
 
+#### Progress and completion 
+
+The progress of a series of requests can be accomplished by creating your own `NSProgress` object and then call `addChild` for the `NSProgress` objects of all of the tasks that are created. You can then add an observer to the `fractionCompleted` of your `NSProgress`.
+
+To determine when the downloads are done, you can add an operation (e.g. a `NSBlockOperation`) and then make it dependent upon all of the other operations that were added to the queue.
+
+To illustrate this, a Swift 2 implementation might look like so. The Objective-C implementation is equivalent.
+
+    import UIKit
+
+    private var observerContext = 0
+
+    class ViewController: UIViewController {
+
+        override func viewDidLoad() {
+            super.viewDidLoad()
+
+            progress = NSProgress()
+            progress.addObserver(self, forKeyPath: "fractionCompleted", options: .New, context: &observerContext)
+
+            downloadFiles()
+        }
+
+        private var progress: NSProgress!
+
+        deinit {
+            progress?.removeObserver(self, forKeyPath: "fractionCompleted")
+        }
+
+        private func downloadFiles() {
+            let filenames = ["as17-134-20380.jpg", "as17-140-21497.jpg", "as17-148-22727.jpg"]
+
+            let baseURL = NSURL(string: "http://example.com/path")!
+
+            let queue = NSOperationQueue()
+            queue.maxConcurrentOperationCount = 4
+
+            progress.totalUnitCount = Int64(filenames.count)
+            progress.completedUnitCount = 0
+
+            let manager = AFHTTPSessionManager()
+            manager.responseSerializer = AFImageResponseSerializer()
+
+            let completionOperation = NSBlockOperation {
+                print("done")
+            }
+
+            for filename in filenames {
+                let url = baseURL.URLByAppendingPathComponent(filename)
+                let operation = AFHTTPSessionOperation(manager: manager, HTTPMethod: "GET", URLString: url.absoluteString, parameters: nil, uploadProgress: nil, downloadProgress: nil, success:
+                    { (task, responseObject) -> Void in
+                        print("\(filename): \(NSStringFromCGSize((responseObject as! UIImage).size))")
+                    }, failure: { task, error in
+                        print("\(filename): \(error)")
+                    })
+                queue.addOperation(operation)
+                completionOperation.addDependency(operation)
+                progress.addChild(manager.downloadProgressForTask(operation.task!)!, withPendingUnitCount: 1)
+            }
+
+            queue.addOperation(completionOperation)
+        }
+
+        override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+            if context == &observerContext {
+                if keyPath == "fractionCompleted" {
+                    let percent = change![NSKeyValueChangeNewKey] as! Double
+                    print("\(percent)")
+                }
+            } else {
+                super.observeValueForKeyPath(keyPath, ofObject: object, change: change, context: context)
+            }
+        }
+
+    }
+
+Note, this is a mix and match situation, where you can use either `NSProgress` or completion handler or both or neither. I just depends upon your needs.
+
 ### Reference
 
 As contemplated in AFNetworking issue [#1504](https://github.com/AFNetworking/AFNetworking/issues/1504).

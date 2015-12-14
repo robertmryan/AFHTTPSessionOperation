@@ -13,6 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AFURLSessionOperation : AsynchronousOperation
 
+/** The NSURLSessionTask associated with this operation
+ */
+@property (nonatomic, strong, readonly, nullable) NSURLSessionTask *task;
+
 /**
  Creates an `NSURLSessionDataTask` with the specified request.
  

@@ -10,7 +10,7 @@
 
 @interface AFURLSessionOperation ()
 
-@property (nonatomic, strong) NSURLSessionTask *task;
+@property (nonatomic, strong, readwrite, nullable) NSURLSessionTask *task;
 
 @end
 

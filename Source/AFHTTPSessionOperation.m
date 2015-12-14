@@ -24,15 +24,7 @@
 @interface AFHTTPSessionOperation ()
 
 @property (nonatomic, strong) AFHTTPSessionManager *manager;
-@property (nonatomic, copy) NSString *method;
-@property (nonatomic, copy) NSString *URLString;
-@property (nonatomic, copy) id parameters;
-@property (nonatomic, copy) void (^uploadProgress)(NSProgress *uploadProgress);
-@property (nonatomic, copy) void (^downloadProgress)(NSProgress *downloadProgress);
-@property (nonatomic, copy) void (^success)(NSURLSessionDataTask *task, id responseObject);
-@property (nonatomic, copy) void (^failure)(NSURLSessionDataTask *task, NSError * error);
-
-@property (nonatomic, weak) NSURLSessionTask *task;
+@property (nonatomic, strong, readwrite, nullable) NSURLSessionTask *task;
 
 @end
 
@@ -49,40 +41,29 @@
 
     AFHTTPSessionOperation *operation = [[self alloc] init];
     
-    operation.manager = manager;
-    operation.method = method;
-    operation.URLString = URLString;
-    operation.parameters = parameters;
-    operation.uploadProgress = uploadProgress;
-    operation.downloadProgress = downloadProgress;
-    operation.success = success;
-    operation.failure = failure;
-    
+    NSURLSessionTask *task = [manager dataTaskWithHTTPMethod:method URLString:URLString parameters:parameters uploadProgress:uploadProgress downloadProgress:downloadProgress success:^(NSURLSessionDataTask *task, id responseObject){
+        if (success) {
+            success(task, responseObject);
+        }
+        [operation completeOperation];
+    } failure:^(NSURLSessionDataTask *task, NSError *error) {
+        if (failure) {
+            failure(task, error);
+        }
+        [operation completeOperation];
+    }];
+    [task resume];
+    operation.task = task;
+
     return operation;
 }
 
 - (void)main {
-    NSURLSessionTask *task = [self.manager dataTaskWithHTTPMethod:self.method URLString:self.URLString parameters:self.parameters uploadProgress:self.uploadProgress downloadProgress:self.downloadProgress success:^(NSURLSessionDataTask *task, id responseObject){
-        if (self.success) {
-            self.success(task, responseObject);
-        }
-        [self completeOperation];
-    } failure:^(NSURLSessionDataTask *task, NSError *error) {
-        if (self.failure) {
-            self.failure(task, error);
-        }
-        [self completeOperation];
-    }];
-    [task resume];
-    self.task = task;
+    [self.task resume];
 }
 
 - (void)completeOperation {
-    self.failure = nil;
-    self.success = nil;
-    self.downloadProgress = nil;
-    self.uploadProgress = nil;
-    
+    self.task = nil;
     [super completeOperation];
 }
 
