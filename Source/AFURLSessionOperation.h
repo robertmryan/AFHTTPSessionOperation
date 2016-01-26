@@ -68,7 +68,7 @@ NS_ASSUME_NONNULL_BEGIN
                                    request:(NSURLRequest *)request
                                   fromFile:(NSURL *)fileURL
                                   progress:(nullable void (^)(NSProgress *uploadProgress)) uploadProgressBlock
-                         completionHandler:(nullable void (^)(NSURLResponse *response, id _Nullable responseObject, NSError  * _Nullable error))completionHandler;
+                         completionHandler:(nullable void (^)(NSURLResponse *response, id _Nullable responseObject, NSError * _Nullable error))completionHandler;
 
 /**
  Creates an `NSURLSessionUploadTask` with the specified request for an HTTP body.

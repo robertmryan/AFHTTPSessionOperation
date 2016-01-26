@@ -2,9 +2,9 @@
 
 ### Introduction
 
-`AFHTTPSessionOperation` is a `NSOperation` subclass for HTTP requests added to `AFHTTPSessionManager`. `AFURLSessionOperation` is a `NSOperation` subclass for data, upload, and download requests implemented in `AFURLSessionManager`. 
+`AFHTTPSessionOperation` is a `NSOperation` subclass for HTTP requests added to [AFNetworking](https://github.com/AFNetworking/AFNetworking)'s `AFHTTPSessionManager`. `AFURLSessionOperation` is a `NSOperation` subclass for data, upload, and download requests implemented in `AFURLSessionManager`. 
 
-This has been updated for AFNetworking 3.0. See [`2.x` branch](https://github.com/robertmryan/AFHTTPSessionOperation/tree/2.x) of this repo if you're using AFNetworking 2.x.
+This has been updated for AFNetworking 3.x. See [`2.x` branch](https://github.com/robertmryan/AFHTTPSessionOperation/tree/2.x) of this repo if you're using AFNetworking 2.x.
 
 When using `AFHTTPRequestOperationManager` (now retired), you enjoy `NSOperation` capabilities, but when using `AFHTTPSessionManager`, you don't. This is somewhat understandable (as `NSURLSession` introduces background requests, and that's incompatible with `NSOperation`-based approaches), but when performing requests in the foreground, it's useful to have `NSOperation`-style capabilities. This class makes that possible.
 

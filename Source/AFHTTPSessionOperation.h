@@ -37,8 +37,8 @@ NS_ASSUME_NONNULL_BEGIN
                           parameters:(nullable id)parameters
                       uploadProgress:(nullable void (^)(NSProgress *uploadProgress)) uploadProgress
                     downloadProgress:(nullable void (^)(NSProgress *downloadProgress)) downloadProgress
-                             success:(nullable void (^)(NSURLSessionDataTask *, id))success
-                             failure:(nullable void (^)(NSURLSessionDataTask *, NSError *))failure;
+                             success:(nullable void (^)(NSURLSessionDataTask *task, id responseObject))success
+                             failure:(nullable void (^)(NSURLSessionDataTask *task, NSError *error))failure;
 
 @end
 
