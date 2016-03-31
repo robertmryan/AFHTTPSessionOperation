@@ -65,23 +65,23 @@
 }
 
 - (void)setExecuting:(BOOL)executing {
-    @synchronized(self) {
-        if (_executing != executing) {
-            [self willChangeValueForKey:@"isExecuting"];
+    if (_executing != executing) {
+        [self willChangeValueForKey:@"isExecuting"];
+        @synchronized(self) {
             _executing = executing;
-            [self didChangeValueForKey:@"isExecuting"];
         }
+        [self didChangeValueForKey:@"isExecuting"];
     }
 }
 
 - (void)setFinished:(BOOL)finished {
+    [self willChangeValueForKey:@"isFinished"];
     @synchronized(self) {
         if (_finished != finished) {
-            [self willChangeValueForKey:@"isFinished"];
             _finished = finished;
-            [self didChangeValueForKey:@"isFinished"];
         }
     }
+    [self didChangeValueForKey:@"isFinished"];
 }
 
 @end
