@@ -52,7 +52,7 @@
         }
         [operation completeOperation];
     }];
-    [task resume];
+
     operation.task = task;
 
     return operation;
