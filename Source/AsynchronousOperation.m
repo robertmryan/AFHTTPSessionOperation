@@ -75,13 +75,13 @@
 }
 
 - (void)setFinished:(BOOL)finished {
-    [self willChangeValueForKey:@"isFinished"];
-    @synchronized(self) {
-        if (_finished != finished) {
+    if (_finished != finished) {
+        [self willChangeValueForKey:@"isFinished"];
+        @synchronized(self) {
             _finished = finished;
         }
+        [self didChangeValueForKey:@"isFinished"];
     }
-    [self didChangeValueForKey:@"isFinished"];
 }
 
 @end
