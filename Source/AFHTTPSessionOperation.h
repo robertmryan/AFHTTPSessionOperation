@@ -39,6 +39,13 @@ NS_ASSUME_NONNULL_BEGIN
                     downloadProgress:(nullable void (^)(NSProgress *downloadProgress)) downloadProgress
                              success:(nullable void (^)(NSURLSessionDataTask *task, id responseObject))success
                              failure:(nullable void (^)(NSURLSessionDataTask *task, NSError *error))failure;
+                             
+
++ (instancetype)operationWithManager:(AFHTTPSessionManager *)manager
+                             request:(NSURLRequest *)request
+                      uploadProgress:(void (^)(NSProgress * _Nonnull uploadProgress))uploadProgress
+                    downloadProgress:(void (^)(NSProgress * _Nonnull downloadProgress))downloadProgress
+                   completionHandler:(void (^)(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error))completionHandler;
 
 @end
 
