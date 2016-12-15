@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name     = 'AFSessionOperation'
-  s.version  = '1.0.8'
+  s.version  = '1.0.9'
   s.license  = 'MIT'
   s.summary  = 'NSOperation subclass for HTTP requests added to AFNetworking.'
   s.homepage = 'https://github.com/robertmryan/AFHTTPSessionOperation'

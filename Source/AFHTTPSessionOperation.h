@@ -21,9 +21,8 @@ NS_ASSUME_NONNULL_BEGIN
  Creates an `AFHTTPSessionOperation` with the specified request.
  
  @param manager            The AFURLSessionManager for the operation.
- @param request            The HTTP request for the request.
- @param method             The HTTP method (e.g. GET, POST, etc.).
- @param parameter          A dictionary of parameters to be added to the request. The nature of the encoding is dictated by the manager's requestSerializer setting.
+ @param HTTPMethod         The HTTP method (e.g. GET, POST, etc.).
+ @param parameters         A dictionary of parameters to be added to the request. The nature of the encoding is dictated by the manager's requestSerializer setting.
  @param uploadProgress     A block that is called as the upload of the request body progresses.
  @param downloadProgress   A block that is called as the download of the server response progresses.
  @param success            A block object to be executed if and when the task successfully finishes.
@@ -32,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
  @returns AFURLSessionOperation that can be added to a NSOperationQueue.
  */
 + (instancetype)operationWithManager:(AFHTTPSessionManager *)manager
-                          HTTPMethod:(NSString *)method
+                          HTTPMethod:(NSString *)HTTPMethod
                            URLString:(NSString *)URLString
                           parameters:(nullable id)parameters
                       uploadProgress:(nullable void (^)(NSProgress *uploadProgress)) uploadProgress

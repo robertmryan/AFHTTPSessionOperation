@@ -20,6 +20,10 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  Creates an `NSURLSessionDataTask` with the specified request.
  
+ In the spirit of AFNetworking deprecating `dataTaskWithRequest` without `uploadProgress` and `downloadProgress`,
+ this also is deprecated. Use `dataOperationWithManager:request:uploadProgress:downloadProgress:completionHandler:`
+ instead.
+ 
  @param manager The AFURLSessionManager for the operation.
  @param request The HTTP request for the request.
  @param completionHandler A block object to be executed when the task finishes. This block has no return value and takes three arguments: the server response, the response object created by that serializer, and the error that occurred, if any.
@@ -28,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)dataOperationWithManager:(AFURLSessionManager *)manager
                                  request:(NSURLRequest *)request
-                       completionHandler:(nullable void (^)(NSURLResponse *response, id _Nullable responseObject,  NSError * _Nullable error))completionHandler;
+                       completionHandler:(nullable void (^)(NSURLResponse *response, id _Nullable responseObject,  NSError * _Nullable error))completionHandler  DEPRECATED_ATTRIBUTE;
 
 /**
  Creates an `NSURLSessionDataTask` with the specified request.
@@ -43,8 +47,8 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)dataOperationWithManager:(AFURLSessionManager *)manager
                                  request:(NSURLRequest *)request
-                          uploadProgress:(nullable void (^)(NSProgress *uploadProgress)) uploadProgressBlock
-                        downloadProgress:(nullable void (^)(NSProgress *downloadProgress)) downloadProgressBlock
+                          uploadProgress:(nullable void (^)(NSProgress *uploadProgress)) uploadProgress
+                        downloadProgress:(nullable void (^)(NSProgress *downloadProgress)) downloadProgress
                        completionHandler:(nullable void (^)(NSURLResponse *response, id _Nullable responseObject,  NSError * _Nullable error))completionHandler;
 
 ///---------------------------
@@ -67,7 +71,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)uploadOperationWithManager:(AFURLSessionManager *)manager
                                    request:(NSURLRequest *)request
                                   fromFile:(NSURL *)fileURL
-                                  progress:(nullable void (^)(NSProgress *uploadProgress)) uploadProgressBlock
+                                  progress:(nullable void (^)(NSProgress *uploadProgress)) progress
                          completionHandler:(nullable void (^)(NSURLResponse *response, id _Nullable responseObject, NSError * _Nullable error))completionHandler;
 
 /**
@@ -84,7 +88,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)uploadOperationWithManager:(AFURLSessionManager *)manager
                                    request:(NSURLRequest *)request
                                   fromData:(nullable NSData *)bodyData
-                                  progress:(nullable void (^)(NSProgress *uploadProgress)) uploadProgressBlock
+                                  progress:(nullable void (^)(NSProgress *uploadProgress)) progress
                          completionHandler:(nullable void (^)(NSURLResponse *response, id _Nullable responseObject, NSError * _Nullable error))completionHandler;
 
 /**
@@ -99,7 +103,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)uploadOperationWithManager:(AFURLSessionManager *)manager
                            streamedRequest:(NSURLRequest *)request
-                                  progress:(nullable void (^)(NSProgress *uploadProgress)) uploadProgressBlock
+                                  progress:(nullable void (^)(NSProgress *uploadProgress)) progress
                          completionHandler:(nullable void (^)(NSURLResponse *response, id _Nullable responseObject, NSError * _Nullable error))completionHandler;
 
 ///-----------------------------
@@ -121,7 +125,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)downloadOperationWithManager:(AFURLSessionManager *)manager
                                      request:(NSURLRequest *)request
-                                    progress:(nullable void (^)(NSProgress *downloadProgress)) downloadProgressBlock
+                                    progress:(nullable void (^)(NSProgress *downloadProgress)) progress
                                  destination:(nullable NSURL * (^)(NSURL *targetPath, NSURLResponse *response))destination
                            completionHandler:(nullable void (^)(NSURLResponse *response, NSURL * _Nullable filePath, NSError * _Nullable error))completionHandler;
 
@@ -138,7 +142,7 @@ NS_ASSUME_NONNULL_BEGIN
  */
 + (instancetype)downloadOperationWithManager:(AFURLSessionManager *)manager
                                   resumeData:(NSData *)resumeData
-                                    progress:(nullable void (^)(NSProgress *downloadProgress)) downloadProgressBlock
+                                    progress:(nullable void (^)(NSProgress *downloadProgress)) progress
                                  destination:(nullable NSURL * (^)(NSURL *targetPath, NSURLResponse *response))destination
                            completionHandler:(nullable void (^)(NSURLResponse *response, NSURL * _Nullable filePath, NSError * _Nullable error))completionHandler;
 
