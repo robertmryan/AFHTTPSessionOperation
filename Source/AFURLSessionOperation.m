@@ -19,7 +19,7 @@
 + (instancetype)dataOperationWithManager:(AFURLSessionManager *)manager
                                  request:(NSURLRequest *)request
                        completionHandler:(nullable void (^)(NSURLResponse *response, id _Nullable responseObject,  NSError * _Nullable error))completionHandler {
-    AFURLSessionOperation *operation = [[AFURLSessionOperation alloc] init];
+    AFURLSessionOperation *operation = [[self alloc] init];
     
     operation.task = [manager dataTaskWithRequest:request uploadProgress:nil downloadProgress:nil completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         if (completionHandler) completionHandler(response, responseObject, error);
@@ -34,7 +34,7 @@
                           uploadProgress:(nullable void (^)(NSProgress *uploadProgress)) uploadProgress
                         downloadProgress:(nullable void (^)(NSProgress *downloadProgress)) downloadProgress
                        completionHandler:(nullable void (^)(NSURLResponse *response, id _Nullable responseObject,  NSError * _Nullable error))completionHandler {
-    AFURLSessionOperation *operation = [[AFURLSessionOperation alloc] init];
+    AFURLSessionOperation *operation = [[self alloc] init];
     
     operation.task = [manager dataTaskWithRequest:request uploadProgress:uploadProgress downloadProgress:downloadProgress completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         if (completionHandler) completionHandler(response, responseObject, error);
@@ -64,7 +64,7 @@
                                   fromData:(nullable NSData *)bodyData
                                   progress:(nullable void (^)(NSProgress *uploadProgress)) progress
                          completionHandler:(nullable void (^)(NSURLResponse *response, id _Nullable responseObject, NSError * _Nullable error))completionHandler {
-    AFURLSessionOperation *operation = [[AFURLSessionOperation alloc] init];
+    AFURLSessionOperation *operation = [[self alloc] init];
     
     operation.task = [manager uploadTaskWithRequest:request fromData:bodyData progress:progress completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         if (completionHandler) completionHandler(response, responseObject, error);
@@ -78,7 +78,7 @@
                            streamedRequest:(NSURLRequest *)request
                                   progress:(nullable void (^)(NSProgress *uploadProgress)) progress
                          completionHandler:(nullable void (^)(NSURLResponse *response, id _Nullable responseObject, NSError * _Nullable error))completionHandler {
-    AFURLSessionOperation *operation = [[AFURLSessionOperation alloc] init];
+    AFURLSessionOperation *operation = [[self alloc] init];
     
     operation.task = [manager uploadTaskWithStreamedRequest:request progress:progress completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error) {
         if (completionHandler) completionHandler(response, responseObject, error);
@@ -93,7 +93,7 @@
                                     progress:(nullable void (^)(NSProgress *downloadProgress)) progress
                                  destination:(nullable NSURL * (^)(NSURL *targetPath, NSURLResponse *response))destination
                            completionHandler:(nullable void (^)(NSURLResponse *response, NSURL * _Nullable filePath, NSError * _Nullable error))completionHandler {
-    AFURLSessionOperation *operation = [[AFURLSessionOperation alloc] init];
+    AFURLSessionOperation *operation = [[self alloc] init];
     
     operation.task = [manager downloadTaskWithRequest:request progress:progress destination:destination completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
         if (completionHandler) completionHandler(response, filePath, error);
@@ -108,7 +108,7 @@
                                     progress:(nullable void (^)(NSProgress *downloadProgress)) progress
                                  destination:(nullable NSURL * (^)(NSURL *targetPath, NSURLResponse *response))destination
                            completionHandler:(nullable void (^)(NSURLResponse *response, NSURL * _Nullable filePath, NSError * _Nullable error))completionHandler {
-    AFURLSessionOperation *operation = [[AFURLSessionOperation alloc] init];
+    AFURLSessionOperation *operation = [[self alloc] init];
     
     operation.task = [manager downloadTaskWithResumeData:resumeData progress:progress destination:destination completionHandler:^(NSURLResponse * _Nonnull response, NSURL * _Nullable filePath, NSError * _Nullable error) {
         if (completionHandler) completionHandler(response, filePath, error);
