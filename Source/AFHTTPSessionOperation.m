@@ -58,6 +58,23 @@
     return operation;
 }
 
++ (instancetype)operationWithManager:(AFHTTPSessionManager *)manager
+                             request:(NSURLRequest *)request
+                            uploadProgress:(void (^)(NSProgress * _Nonnull uploadProgress))uploadProgress
+downloadProgress:(void (^)(NSProgress * _Nonnull downloadProgress))downloadProgress
+completionHandler:(void (^)(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error))completionHandler
+{
+    AFHTTPSessionOperation *operation = [[self alloc] init];
+    NSURLSessionTask *task = [manager dataTaskWithRequest:request uploadProgress:uploadProgress downloadProgress:downloadProgress completionHandler:^(NSURLResponse * _Nonnull response, id  _Nullable responseObject, NSError * _Nullable error){
+        completionHandler(response, responseObject, error);
+        [operation completeOperation];
+    }];
+    
+    operation.task = task;
+    
+    return operation;
+}
+
 - (void)main {
     [self.task resume];
 }
